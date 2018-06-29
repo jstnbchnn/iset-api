@@ -4,6 +4,10 @@
   "main": "./build/index.js",
   "module": "./src/index.js",
   "license": "MIT",
+  "engines": {
+    "node": "8.1.4",
+    "npm": "6.0.0"
+  },
   "scripts": {
     "start": "node index.js",
     "build": "babel src --out-dir build",
