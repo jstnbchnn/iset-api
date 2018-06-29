@@ -4,7 +4,7 @@ const cors = require('cors');
 const api = require('./src/api');
 
 const app = express();
-const port = 5000;
+const port = 3030;
 
 app.use(cors());
 
@@ -30,4 +30,4 @@ app.get('/teams', async (req, res) => {
   res.json(competitions);
 });
 
-app.listen(port, () => console.log(`listening on ${port}`));
+app.listen(port, () => console.log(`listening on ${process.env.PORT || port}`));
