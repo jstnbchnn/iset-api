@@ -1,23 +1,10 @@
-const axios = require('axios');
 const differenceInDays = require('date-fns/difference_in_days');
 
 const Builder = require('./lib/urlBuilder');
 
 const API_BASE_URL = 'http://www.iset.net/TournamentSPA';
 
-exports.getAllDivisions = async () => {
-  const divisionData =
-    await makeGetRequest({ url: Builder.urlBuilder([API_BASE_URL, 'getTournamentDivisions'], { tid: 2267 })});
-
-  return divisionData.map(division => {
-    const { programDivisionName, pk: id } = division;
-
-    return {
-      id,
-      name: programDivisionName
-    };
-  });
-};
+const { makeGetRequest } = require('./lib/utils');
 
 exports.getScheduleIdsForDivision = async (divisionId) => {
   const divisionInfoData = await makeGetRequest({
@@ -36,7 +23,7 @@ exports.getScheduleIdsForDivision = async (divisionId) => {
 
 exports.getSchedule = async (divisionId, scheduleId) => {
   const competitions = await makeGetRequest({
-    url: `https://www.iset.net/TournamentSPA/getScheduleCompetitions?did=${divisionId}&sid=${scheduleId}&tid=2267`
+    url: `${API_BASE_URL}/getScheduleCompetitions?did=${divisionId}&sid=${scheduleId}&tid=2267`
   });
 
   return competitions;
@@ -44,7 +31,7 @@ exports.getSchedule = async (divisionId, scheduleId) => {
 
 
 exports.getTeamsFromDivisionId = async (divisionId) => {
-  const { divisions } = await makeGetRequest({ url: 'https://www.iset.net/TournamentSPA/getTeamsPageData?tid=2267' });
+  const { divisions } = await makeGetRequest({ url: `${API_BASE_URL}/getTeamsPageData?tid=2267` });
   const teams = divisions.reduce((acc, division) => {
     //eslint-disable-next-line prefer-destructuring
     const { divisionId } = division.teams[0];
@@ -134,9 +121,4 @@ const reduceSets = (competition) => {
   return competition;
 };
 
-const makeGetRequest = async (options) => {
-  let { data } = await axios(options);
-
-  return data;
-};
 

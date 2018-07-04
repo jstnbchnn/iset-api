@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const api = require('./src/api');
+const ScheduleController = require('./src/ScheduleController');
 
 const app = express();
 const PORT = process.env.PORT || 3030;
@@ -19,14 +19,14 @@ app.get('/', async (req, res) => {
 
 app.get('/division/:divisionId', async (req, res) => {
   const { divisionId } = req.params;
-  const teams = await api.getTeamsFromDivisionId(divisionId);
+  const teams = await ScheduleController.getTeamsFromDivisionId(divisionId);
   res.json(teams);
 });
 
 app.get('/teams', async (req, res) => {
   const { divisionId, teamId } = req.query;
 
-  const competitions = await api.getAllCompetitionsForTeam(divisionId, parseInt(teamId));
+  const competitions = await ScheduleController.getAllCompetitionsForTeam(divisionId, parseInt(teamId));
   res.json(competitions);
 });
 
