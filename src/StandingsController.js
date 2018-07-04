@@ -30,16 +30,18 @@ const sortByWins = (teams) => {
 const flatten = (acc, val) => [...acc, ...val.drawList];
 
 const setRecordByTeamId = (acc, val) => {
-  if (acc[val.registeredTeamId]) {
-    acc[val.registeredTeamId].compsWon += val.draw.CompsWon;
-    acc[val.registeredTeamId].compsLost += val.draw.CompsLost;
+  const { registeredTeamId, draw: { CompsWon, CompsLost, TeamName }} = val;
+
+  if (acc[registeredTeamId]) {
+    acc[registeredTeamId].compsWon += CompsWon;
+    acc[registeredTeamId].compsLost += CompsLost;
     return acc;
   }
 
-  acc[val.registeredTeamId] = {
-    compsWon: val.draw.CompsWon,
-    compsLost: val.draw.CompsLost,
-    teamName: val.draw.TeamName
+  acc[registeredTeamId] = {
+    compsWon: CompsWon,
+    compsLost: CompsLost,
+    teamName: TeamName
   };
 
   return acc;
