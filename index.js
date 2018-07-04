@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const ScheduleController = require('./src/ScheduleController');
+const StandingsController = require('./src/StandingsController');
+const { getAllDivisions } = require('./src/lib/utils');
 
 const app = express();
 const PORT = process.env.PORT || 3030;
@@ -10,7 +12,7 @@ app.use(cors());
 
 app.get('/', async (req, res) => {
   try {
-    const divisions = await api.getAllDivisions();
+    const divisions = await getAllDivisions();
     res.json(divisions);
   } catch (error) {
     console.error(error);
@@ -28,6 +30,13 @@ app.get('/teams', async (req, res) => {
 
   const competitions = await ScheduleController.getAllCompetitionsForTeam(divisionId, parseInt(teamId));
   res.json(competitions);
+});
+
+app.get('/standings', async (req, res) => {
+  const { divisionId } = req.query;
+
+  const standingsData = await StandingsController.getStandingsForTeam(divisionId, 0);
+  res.json(standingsData);
 });
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
