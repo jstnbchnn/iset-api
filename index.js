@@ -35,7 +35,7 @@ app.get('/teams', async (req, res) => {
 app.get('/standings', async (req, res) => {
   const { divisionId } = req.query;
 
-  const standingsData = await StandingsController.getStandingsForTeam(divisionId, 0);
+  const standingsData = await StandingsController.getStandingsForTeam(divisionId);
   res.json(standingsData);
 });
 
