@@ -4,9 +4,6 @@
   "main": "./build/index.js",
   "module": "./src/index.js",
   "license": "MIT",
-  "engines": {
-    "node": "8.9.1"
-  },
   "scripts": {
     "start": "node index.js",
     "build": "babel src --out-dir build",
@@ -14,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.15.0",
     "cors": "^2.8.4",
     "date-fns": "^1.29.0",
     "express": "^4.16.3"
@@ -26,8 +24,14 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
-    "eslint": "^4.19.1",
-    "jest": "^23.1.0",
-    "regenerator-runtime": "^0.11.1"
+    "jest": "^23.3.0",
+    "jest-extended": "^0.7.2",
+    "regenerator-runtime": "^0.12.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "./test/globals.js"
+    ],
+    "setupTestFrameworkScriptFile": "jest-extended"
   }
 }
