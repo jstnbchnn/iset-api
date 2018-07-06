@@ -6,11 +6,11 @@ describe('StandingsController', async () => {
     standings = await StandingsController.getStandingsForTeam('1');
   });
 
-  xit('returns an array', async () => {
+  it('returns an array', () => {
     expect.toBeArray(standings);
   });
 
-  xit('returns objects in the right shape', () => {
+  it('returns objects in the right shape', () => {
     //eslint-disable-next-line
     const [firstPlace, ...rest] = standings;
 
