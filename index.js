@@ -13,6 +13,7 @@ app.use(cors());
 app.get('/', async (req, res) => {
   try {
     const divisions = await getAllDivisions();
+
     res.json(divisions);
   } catch (error) {
     console.error(error);

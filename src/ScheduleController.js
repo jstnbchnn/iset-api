@@ -3,6 +3,7 @@ const differenceInDays = require('date-fns/difference_in_days');
 const { urlBuilder } = require('./lib/urlBuilder');
 
 const API_BASE_URL = 'http://www.iset.net/TournamentSPA';
+const TOURNAMENT_ID = 2304;
 
 const { makeGetRequest } = require('./lib/utils');
 
@@ -11,7 +12,7 @@ exports.getScheduleIdsForDivision = async (divisionId) => {
     [API_BASE_URL, 'getDivisionSchedules'],
     {
       did: divisionId,
-      tid: 2267
+      tid: TOURNAMENT_ID
     }
   );
 
@@ -23,17 +24,16 @@ exports.getScheduleIdsForDivision = async (divisionId) => {
 
 exports.getSchedule = async (divisionId, scheduleId) => {
   const competitions = await makeGetRequest({
-    url: `${API_BASE_URL}/getScheduleCompetitions?did=${divisionId}&sid=${scheduleId}&tid=2267`
+    url: `${API_BASE_URL}/getScheduleCompetitions?did=${divisionId}&sid=${scheduleId}&tid=${TOURNAMENT_ID}`
   });
 
   return competitions;
 };
 
 exports.getTeamsFromDivisionId = async (divisionId) => {
-  const { divisions } = await makeGetRequest({ url: `${API_BASE_URL}/getTeamsPageData?tid=2267` });
+  const { divisions } = await makeGetRequest({ url: `${API_BASE_URL}/getTeamsPageData?tid=${TOURNAMENT_ID}` });
   const teams = divisions.reduce((acc, division) => {
-    //eslint-disable-next-line prefer-destructuring
-    const { divisionId } = division.teams[0];
+    const [{ divisionId }] = division.teams;
 
     return {
       ...acc,
@@ -77,9 +77,9 @@ const groupByGameDate = (competitions) => {
 const groupGamesByTense = (competitions) => {
   const now = Date.now();
 
-  return Object.keys(competitions).reduce((acc, group) => {
-    const tense = differenceInDays(now, new Date(group)) <= 0 ? 'futureGames' : 'pastGames';
-    acc[tense][group] = competitions[group];
+  return Object.keys(competitions).reduce((acc, competitionDate) => {
+    const tense = differenceInDays(now, new Date(competitionDate)) <= 0 ? 'futureGames' : 'pastGames';
+    acc[tense][competitionDate] = competitions[competitionDate];
 
     return acc;
   }, { futureGames: {}, pastGames: {} });
@@ -90,9 +90,9 @@ const flatten = (acc, val) => ([ ...acc, ...val.competitions ]);
 const squash = ({
   playingSurface,
   division,
+  datetimesort,
   date,
   longdate,
-  datetimesort,
   time,
   winner,
   competitor1,
