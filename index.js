@@ -1,16 +1,19 @@
 const express = require('express');
 const cors = require('cors');
 
-const api = require('./src/api');
+const ScheduleController = require('./src/ScheduleController');
+const StandingsController = require('./src/StandingsController');
+const { getAllDivisions } = require('./src/lib/utils');
 
 const app = express();
-const port = 3030;
+const PORT = process.env.PORT || 3030;
 
 app.use(cors());
 
 app.get('/', async (req, res) => {
   try {
-    const divisions = await api.getAllDivisions();
+    const divisions = await getAllDivisions();
+
     res.json(divisions);
   } catch (error) {
     console.error(error);
@@ -19,15 +22,22 @@ app.get('/', async (req, res) => {
 
 app.get('/division/:divisionId', async (req, res) => {
   const { divisionId } = req.params;
-  const teams = await api.getTeamsFromDivisionId(divisionId);
+  const teams = await ScheduleController.getTeamsFromDivisionId(divisionId);
   res.json(teams);
 });
 
 app.get('/teams', async (req, res) => {
   const { divisionId, teamId } = req.query;
 
-  const competitions = await api.getAllCompetitionsForTeam(divisionId, parseInt(teamId));
+  const competitions = await ScheduleController.getAllCompetitionsForTeam(divisionId, parseInt(teamId));
   res.json(competitions);
 });
 
-app.listen(port, () => console.log(`listening on ${process.env.PORT || port}`));
+app.get('/standings', async (req, res) => {
+  const { divisionId } = req.query;
+
+  const standingsData = await StandingsController.getStandingsForTeam(divisionId);
+  res.json(standingsData);
+});
+
+app.listen(PORT, () => console.log(`listening on ${PORT}`));
