@@ -23,6 +23,7 @@ app.get('/', async (req, res) => {
 app.get('/division/:divisionId', async (req, res) => {
   const { divisionId } = req.params;
   const teams = await ScheduleController.getTeamsFromDivisionId(divisionId);
+
   res.json(teams);
 });
 
@@ -38,6 +39,10 @@ app.get('/standings', async (req, res) => {
 
   const standingsData = await StandingsController.getStandingsForTeam(divisionId);
   res.json(standingsData);
+});
+
+app.get('/foo', (req, res) => {
+  res.send('checkmate');
 });
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
