@@ -10,6 +10,11 @@ const PORT = process.env.PORT || 3030;
 
 app.use(cors());
 
+app.use((req, res, next) => {
+  console.log(['req', req]);
+  next();
+});
+
 app.get('/', async (req, res) => {
   try {
     const divisions = await getAllDivisions();
