@@ -41,6 +41,9 @@ exports.getTeamsFromDivisionId = async (divisionId) => {
     };
   }, {});
 
+  if (!teams[divisionId].length) {
+    return [];
+  }
   return teams[divisionId].map(({ pk, divisionId, name }) => ({ id: pk, divisionId, name }));
 };
 
